@@ -15,3 +15,5 @@ class PropertyEnum(str, Enum):
 class MethodEnum(str, Enum):
     POST = "POST"
     GET = "GET"
+    DELETE = "DELETE"
+    PUT = "PUT"
