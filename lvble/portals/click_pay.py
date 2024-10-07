@@ -20,7 +20,7 @@ class ClickPay(Portal):
                 },
             ),
             RequestData(
-                name="get_user_info",
+                name="user_info",
                 method=MethodEnum.POST,
                 url="https://www.clickpay.com/MobileService/Service.asmx/getUserContextJSON",
                 data="NovelPayApp",
@@ -33,8 +33,8 @@ class ClickPay(Portal):
         return self._extract_data_from_response()
 
     def _extract_data_from_response(self) -> schemas.Tenant:
-        email = self.responses["get_user_info"]["Result"]["user"]["Email"]
-        phone = self.responses["get_user_info"]["Result"]["user"]["Cellphone"]
+        email = self.responses["user_info"]["Result"]["user"]["Email"]
+        phone = self.responses["user_info"]["Result"]["user"]["Cellphone"]
         output_model = schemas.Tenant(
             email=email, phone=phone, property_company=PropertyEnum.OCEAN_PRIME, address="asdf"
         )
