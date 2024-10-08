@@ -25,6 +25,12 @@ class ClickPay(Portal):
                 url="https://www.clickpay.com/MobileService/Service.asmx/getUserContextJSON",
                 data="NovelPayApp",
             ),
+            RequestData(
+                name="unit_info",
+                method=MethodEnum.POST,
+                url="https://www.clickpay.com/MobileService/Service.asmx/get_data_allow_impersonation_json",
+                data={"RequestType": "get_user_paynow_desktop", "FilterByGroupLabel": "1", "GroupLabel": ""},
+            ),
         ]
 
     def get_data(self) -> schemas.Tenant:
@@ -35,7 +41,19 @@ class ClickPay(Portal):
     def _extract_data_from_response(self) -> schemas.Tenant:
         email = self.responses["user_info"]["Result"]["user"]["Email"]
         phone = self.responses["user_info"]["Result"]["user"]["Cellphone"]
+        property_company = self.responses["unit_info"]["Result"]["Unit"]["Unit"]["SiteName"]
+        address = self._extract_address()
         output_model = schemas.Tenant(
-            email=email, phone=phone, property_company=PropertyEnum.OCEAN_PRIME, address="asdf"
+            email=email, phone=phone, property_company=property_company, address=address
         )
         return output_model
+
+    def _extract_address(self) -> str:
+        unit_info = self.responses["unit_info"]["Result"]["Unit"]["Unit"]
+        street_name = unit_info["StreetName"]
+        street_number = unit_info["StreetNumber"]
+        apt_number = unit_info["AptNumber"]
+        city = unit_info["City"]
+        state = unit_info["State"]
+        zip = unit_info["Zip"]
+        return f"{street_number} {street_name} {apt_number}, {city} {state} {zip}"

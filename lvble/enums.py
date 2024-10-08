@@ -8,8 +8,8 @@ class PortalEnum(str, Enum):
 
 
 class PropertyEnum(str, Enum):
-    OCEAN_PRIME = "ocean prime"
-    GREY_STAR = "grey star"
+    OCEAN_PRIME = "Ocean Prime"
+    GREY_STAR = "Grey Star"
 
 
 class MethodEnum(str, Enum):
